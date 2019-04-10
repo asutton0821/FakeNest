@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Switch status</h1>
+<p>Cooling: <input type="checkbox" id="cool"></p>
+<span id="test"></span>
+<span id="checkstatus"></span>
+<p>Heating: <input type="checkbox" id="heat"></p>
+<span id="test2"></span>
+<span id="checkstatus2"></span>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script> <!-- include socket.io client side script -->
+<script>
+var socket = io(); //load socket.io-client and connect to the host that serves the page
+window.addEventListener("load", function(){ //when page loads
+  var coolCheckbox = document.getElementById("cool"); 
+  var heatCheckbox = document.getElementById("heat");
+
+  coolCheckbox.addEventListener("change", function() { //add event listener for when checkbox changes
+    socket.emit("cool", Number(this.checked)); //send button status to server (as 1 or 0)
+  });
+
+  heatCheckbox.addEventListener("change", function() { //add event listener for when checkbox changes
+    socket.emit("heat", Number(this.checked)); //send button status to server (as 1 or 0)
+  });
+});
+
+socket.on('cool', function (data) { //get button status from client
+
+  if(document.getElementById("cool").checked == false){
+        document.getElementById("cool").checked = true;
+	document.getElementById("heat").checked = false;
+	 //document.getElementById("checkstatus").innerText = document.getElementById("cool").checked;
+  }
+
+  socket.emit("cool",document.getElementById("cool").checked);
+
+});
+
+
+socket.on('heat', function (data) { //get button status from client
+
+  if(document.getElementById("heat").checked == false){
+        document.getElementById("heat").checked = true;
+	document.getElementById("cool").checked = false;
+  }
+
+  socket.emit("heat",document.getElementById("heat").checked);
+
+});
+
+
+
+</script>
+</html>
+</body>
+</html>
