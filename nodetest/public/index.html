@@ -7,6 +7,8 @@
 <span id="test"></span>
 <span id="checkstatus"></span>
 <p>Heating: <input type="checkbox" id="heat"></p>
+<p>Temperature: <span id="temp"></span></p>
+
 <span id="test2"></span>
 <span id="checkstatus2"></span>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script> <!-- include socket.io client side script -->
@@ -15,7 +17,7 @@ var socket = io(); //load socket.io-client and connect to the host that serves t
 window.addEventListener("load", function(){ //when page loads
   var coolCheckbox = document.getElementById("cool"); 
   var heatCheckbox = document.getElementById("heat");
-
+  var tempLabel = document.getElementById("test2");
   coolCheckbox.addEventListener("change", function() { //add event listener for when checkbox changes
     socket.emit("cool", Number(this.checked)); //send button status to server (as 1 or 0)
   });
@@ -23,6 +25,12 @@ window.addEventListener("load", function(){ //when page loads
   heatCheckbox.addEventListener("change", function() { //add event listener for when checkbox changes
     socket.emit("heat", Number(this.checked)); //send button status to server (as 1 or 0)
   });
+  
+   tempLabel.addEventListener("change", function() { //add event listener for$
+    socket.emit("test2", Number(this.innerText)); //send button status to server ($
+  });
+
+
 });
 
 socket.on('cool', function (data) { //get button status from client
@@ -52,6 +60,8 @@ socket.on('heat', function (data) { //get button status from client
 
 
 </script>
+
+
 </html>
 </body>
 </html>

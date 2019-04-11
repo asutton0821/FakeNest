@@ -20,6 +20,9 @@ function handler (req, res) { //create server
   });
 }
 
+
+
+
 io.sockets.on('connection', function (socket) {// WebSocket Connection
   pushButton1.watch(function (err, value) { //Watch for hardware interrupts on pushButton
     if (err) { //if an error
@@ -35,7 +38,6 @@ io.sockets.on('connection', function (socket) {// WebSocket Connection
     }
     socket.emit('heat', value); //send button status to client
   });
-
 
 
 });
