@@ -5,6 +5,7 @@ var Gpio = require("onoff").Gpio; //include onoff to interact with the GPIO
 var LED = new Gpio(4, "out"); //use GPIO pin 4 as output
 var pushButton1 = new Gpio(4, "in", "both");
 var pushButton2 = new Gpio(6, "in", "both");
+const mcpadc = require("mcp-spi-adc");
 
 http.listen(8080); //listen to port 8080
 
@@ -42,6 +43,20 @@ io.sockets.on("connection", function(socket) {
     }
     socket.emit("heat", value); //send button status to client
   });
+
+  const tempSensor = mcpadc.open(0, { speedHz: 20000 }, err => {
+    if (err) throw err;
+
+    setInterval(() => {
+      tempSensor.read((err, reading) => {
+        //      console.log(reading.value);
+        setTimeout(() => {
+          socket.emit("temp", reading.value);
+          tempSensor();
+        }, 5000);
+      });
+    });
+  });
 });
 
 process.on("SIGINT", function() {
@@ -51,20 +66,4 @@ process.on("SIGINT", function() {
   pushButton1.unexport(); // Unexport Button GPIO to free resources
   pushButton2.unexport();
   process.exit(); //exit completely
-});
-
-const mcpadc = require("mcp-spi-adc");
-
-const tempSensor = mcpadc.open(0, { speedHz: 20000 }, err => {
-  if (err) throw err;
-
-  setInterval(() => {
-    tempSensor.read((err, reading) => {
-      //      console.log(reading.value);
-      document.getElementById("aids").innerText = reading.value;
-
-      console.log((reading.value * 3.3 - 0.5) * 100);
-      console.log(((reading.value * 3300) / 1024) * 100);
-    });
-  }, 1000);
 });

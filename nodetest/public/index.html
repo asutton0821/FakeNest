@@ -9,7 +9,7 @@
 <p>Heating: <input type="checkbox" id="heat"></p>
 <p>Temperature: <span id="temp"></span></p>
 
-<span id="aids"></span>
+
 
 <span id="test2"></span>
 <span id="checkstatus2"></span>
@@ -20,6 +20,12 @@ window.addEventListener("load", function(){ //when page loads
   var coolCheckbox = document.getElementById("cool"); 
   var heatCheckbox = document.getElementById("heat");
   var tempLabel = document.getElementById("test2");
+
+  let temperatureCheck = document.getElementById("temp");
+  temperatureCheck.addEventListener('change', () => {
+    socket.emit('temp', value)
+  })
+
   coolCheckbox.addEventListener("change", function() { //add event listener for when checkbox changes
     socket.emit("cool", Number(this.checked)); //send button status to server (as 1 or 0)
   });
@@ -58,6 +64,11 @@ socket.on('heat', function (data) { //get button status from client
   socket.emit("heat",document.getElementById("heat").checked);
 
 });
+
+
+socket.on('temp', (data) => {
+  socket.emit('temp', document.getElementById("temp").innerText = data);
+})
 
 
 
