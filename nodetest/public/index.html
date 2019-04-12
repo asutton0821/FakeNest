@@ -68,6 +68,8 @@ socket.on('heat', function (data) { //get button status from client
 
 socket.on('temp', (data) => {
   socket.emit('temp', document.getElementById("temp").innerText = data);
+  // document.getElementById("temp").innerText = data 
+  // comment sock.emit and try the code below if you need to test more
 })
 
 
