@@ -9,60 +9,67 @@ background-color: #00FFFF;
 <body>
 <h1>Sutton Thermostat</h1>
 <h5>Copyright 2019 Colson Sutton</h5>
-<h4>Press a switch to toggle modes. Only one mode toggled at a time</h4>
+<h4>Press a switch to toggle modes. Only one mode is toggled at a time.</h4>
 <p>Cooling: <input type="checkbox" id="cool" disabled="disabled" checked=true></p>
 <p>Heating: <input type="checkbox" id="heat" disabled="disabled"></p>
+<p>Fan: <input type="checkbox" id="fan" disabled="disabled" checked=true> (if checked, fan is on)</p>
 <p>Room temperature: <span id="temp"></span></p>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script> <!-- include socket.io client side script -->
+
 <script>
 var socket = io(); //load socket.io-client and connect to the host that serves the page
+var heatcool = 0; //heat/cool flag (1 = heat, 0 = cool);
+var fan = 0; //fan flag (1 = on, 0 = off)
+
 window.addEventListener("load", function(){ //when page loads
   var coolCheckbox = document.getElementById("cool"); 
   var heatCheckbox = document.getElementById("heat");
   var tempLabel = document.getElementById("test2");
 
+
+
   let temperatureCheck = document.getElementById("temp");
   temperatureCheck.addEventListener('change', () => {
     socket.emit('temp', value)
   })
+});
 
-  coolCheckbox.addEventListener("change", function() { //add event listener for when checkbox changes
-    socket.emit("cool", Number(this.checked)); //send button status to server (as 1 or 0)
-  });
-
-  heatCheckbox.addEventListener("change", function() { //add event listener for when checkbox changes
-    socket.emit("heat", Number(this.checked)); //send button status to server (as 1 or 0)
-  });
+socket.on('heatcool', function (data) { //get button status from client
+  console.log("Heatcool triggered: ",heatcool); 
+  console.log("data = ",data);
+  if(heatcool == 0 && data == 0){ //so cool is set now
+	heatcool = 1;
+        document.getElementById("cool").checked = false;
+	document.getElementById("heat").checked = true;
+  }
   
-   tempLabel.addEventListener("change", function() { //add event listener for$
-    socket.emit("test2", Number(this.innerText)); //send button status to server ($
-  });
+    else if(heatcool == 1 && data == 0){   
+	heatcool = 0;
+	document.getElementById("cool").checked = true;
+        document.getElementById("heat").checked = false; 
+    }
 
+    socket.emit('heatcool',data);
 
 });
-
-socket.on('cool', function (data) { //get button status from client
-
-  if(document.getElementById("cool").checked == false){
-        document.getElementById("cool").checked = true;
-	document.getElementById("heat").checked = false;
+socket.on('fan', function (data) { //get button status from client
+  console.log("Fan triggered: ",fan);
+  console.log("data = ",data);
+  if(fan == 0 && data == 0){ //so cool is set now
+        fan = 1;
+        document.getElementById("fan").checked = true;
   }
 
-  socket.emit("cool",document.getElementById("cool").checked);
+    else if(fan == 1 && data == 0){
+        fan = 0;
+        document.getElementById("fan").checked = false;
+    }
+
+    socket.emit('fan',data);
 
 });
 
 
-socket.on('heat', function (data) { //get button status from client
-
-  if(document.getElementById("heat").checked == false){
-        document.getElementById("heat").checked = true;
-	document.getElementById("cool").checked = false;
-  }
-
-  socket.emit("heat",document.getElementById("heat").checked);
-
-});
 
 
 socket.on('temp', (data) => {

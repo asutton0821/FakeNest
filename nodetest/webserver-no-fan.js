@@ -31,7 +31,7 @@ io.sockets.on("connection", function(socket) {
       console.error("There was an error", err); //output error message to console
       return;
     }
-    socket.emit("heatcool", value); //send button status to client
+    socket.emit("cool", value); //send button status to client
   });
   pushButton2.watch(function(err, value) {
     //Watch for hardware interrupts on pushButton
@@ -40,7 +40,7 @@ io.sockets.on("connection", function(socket) {
       console.error("There was an error", err); //output error message to console
       return;
     }
-    socket.emit("fan", value); //send button status to client
+    socket.emit("heat", value); //send button status to client
   });
 
   const tempSensor = mcpadc.open(0, { speedHz: 20000 }, err => {
