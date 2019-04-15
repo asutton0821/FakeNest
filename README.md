@@ -11,6 +11,10 @@ npm install mcp-spi-adc
 
 Enable SPI (hardware mode)
 
+To run the webserver:
+
+sudo node webserver.js
+
 
 https://learn.adafruit.com/raspberry-pi-analog-to-digital-converters/mcp3008 <- Change this to HW mode, not software... only HW works with JS
 
