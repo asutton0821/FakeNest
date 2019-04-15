@@ -9,7 +9,7 @@ const mcpadc = require("mcp-spi-adc");
 http.listen(5000);
 
 function handler(req, res) {
-  fs.readFile(__dirname + "/public/index.html", function(err, data) {
+  fs.readFile(__dirname + "/index.html", function(err, data) {
     if (err) {
       res.writeHead(404, { "Content-Type": "text/html" });
       return res.end("404 Not Found");
