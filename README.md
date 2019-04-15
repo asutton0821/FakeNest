@@ -3,19 +3,23 @@ Nest Made From Raspberry Pi
 
 RASP PI Usage ONLY:
 
-Install nodejs (should install npm) 
+Install nodejs:
+sudo apt-get install nodejs
 
-npm install onoff
-npm install socketio
-npm install mcp-spi-adc
+Install npm:
+sudo apt-get install npm
 
-Enable SPI (hardware mode)
+Node packages needed:
+sudo npm install onoff
+sudo npm install socketio
+sudo npm install mcp-spi-adc
 
 To run the webserver:
-
 sudo node webserver.js
 
+Hardware Configurations:
 
+Enable SPI (hardware mode) 
 https://learn.adafruit.com/raspberry-pi-analog-to-digital-converters/mcp3008 <- Change this to HW mode, not software... only HW works with JS
 
 
